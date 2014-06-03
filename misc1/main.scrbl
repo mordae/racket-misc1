@@ -7,6 +7,7 @@
 
 @local-table-of-contents[]
 
+@include-section["syntax.scrbl"]
 @include-section["dict.scrbl"]
 @include-section["list.scrbl"]
 
