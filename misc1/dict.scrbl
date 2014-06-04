@@ -42,4 +42,15 @@
   The base dictionary is mutated multiple times.
 }
 
+@defform[(let-dict (((name ...) value) ...) body ...)]{
+  Similar to let-values, but instead of multiple return values
+  consuming dictionaries with keys identical to target names.
+
+  @examples[#:eval dict-eval
+    (let-dict (((a b c) (hasheq 'a 1 'b 2 'c 3))
+               ((d e f) '((d . 4) (e . 5) (f . 6))))
+      (+ a b c d e f))
+  ]
+}
+
 @; vim:set ft=scribble sw=2 ts=2 et:
