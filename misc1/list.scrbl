@@ -43,4 +43,15 @@
   ]
 }
 
+@defform[(let-list (((name ...) value) ...) body ...)]{
+  Similar to @racket[let-values], but consuming lists instead of
+  multiple value returns.
+
+  @examples[#:eval list-eval
+    (let-list (((a b c) '(1 2 3))
+               ((d e f) '(4 5 6)))
+      (+ a b c d e f))
+  ]
+}
+
 @; vim:set ft=scribble sw=2 ts=2 et:
