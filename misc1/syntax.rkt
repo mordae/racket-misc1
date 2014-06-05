@@ -3,7 +3,8 @@
 ; Syntax Extensions
 ;
 
-(provide producing using when* loop λ_)
+(provide
+  (all-defined-out))
 
 
 ;; Bind value to a name and perform a few operations,
@@ -35,6 +36,41 @@
   (let loop ()
     (begin body ...)
     (loop)))
+
+
+;; Loop body as long as the condition holds.
+(define-syntax-rule (while continue? body ...)
+  (let loop ()
+    (when continue?
+      (begin body ...)
+      (loop))))
+
+
+;; Loop body as long as the condition does not hold.
+(define-syntax-rule (until halt? body ...)
+  (let loop ()
+    (unless halt?
+      (begin body ...)
+      (loop))))
+
+
+;; Loop as long as any cond-style clause matches.
+;; The else clause is reserved.
+(define-syntax-rule (loop-while-cond (test body ...) ...)
+  (let loop ()
+    (cond
+      (test (begin body ...)
+            (loop)) ...
+      (else (void)))))
+
+
+;; Loop until any cond-style clause matches.
+;; The else clause is reserved.
+(define-syntax-rule (loop-until-cond (test body ...) ...)
+  (let loop ()
+    (cond
+      (test body ...) ...
+      (else (loop)))))
 
 
 ;; Alias of lambda accepting any number of arguments, ignoring them all.

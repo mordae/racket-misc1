@@ -46,6 +46,37 @@
   Loop body indefinitely.
 }
 
+@defform[(while continue? body ...)]{
+  Loop body as long as the condition holds.
+}
+
+@defform[(until halt? body ...)]{
+  Loop body as long as the condition does not hold.
+}
+
+@defform[(loop-while-cond (test body ...) ...)]{
+  Loop as long as any cond-style clause matches.
+  The else clause is reserved.
+
+  @examples[#:eval syntax-eval
+    (loop-while-cond
+      ((< (random) 0.2)  (display "jackpot!\n"))
+      ((< (random) 0.7)  (display "hit!\n")))
+  ]
+}
+
+@defform[(loop-until-cond (test body ...) ...)]{
+  Loop until any cond-style clause matches.
+  The else clause is reserved.
+
+  @examples[#:eval syntax-eval
+    (loop-until-cond
+      ((> (random) 0.5)  (display "pressure too high!"))
+      ((> (random) 0.3)  (display "boiler cracking!"))
+      ((> (random) 0.1)  (display "office is a pressure coo...!")))
+  ]
+}
+
 @defform[(λ_ body ...)]{
   Alias of @racket[λ] accepting any number of arguments, ignoring them all.
 
