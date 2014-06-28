@@ -10,6 +10,7 @@
 @include-section["syntax.scrbl"]
 @include-section["dict.scrbl"]
 @include-section["list.scrbl"]
+@include-section["reject.scrbl"]
 @include-section["throw.scrbl"]
 
 @; vim:set ft=scribble sw=2 ts=2 et:
