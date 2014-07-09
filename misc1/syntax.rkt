@@ -10,7 +10,7 @@
 ;; Bind value to a name and perform a few operations,
 ;; producing the original value.
 (define-syntax-rule (producing (name value) body ...)
-  (let ((name value))
+  (letrec ((name value))
     (begin body ...)
     name))
 
@@ -18,7 +18,7 @@
 ;; Bind value to name and perform a few operations.
 ;; Returns `#<void>`.
 (define-syntax-rule (using (name value) body ...)
-  (let ((name value))
+  (letrec ((name value))
     (begin body ...)
     (void)))
 
@@ -26,7 +26,7 @@
 ;; Bind value to name and perform a few operations,
 ;; provided the value is true.  Returns `#<void>`.
 (define-syntax-rule (when* (name value) body ...)
-  (let ((name value))
+  (letrec ((name value))
     (when name
       (begin body ...))))
 
