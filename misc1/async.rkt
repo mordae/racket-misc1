@@ -23,19 +23,9 @@
 
 
 (define (async-proc proc)
-  (let ((cached-result #f))
-    (guard-evt (λ ()
-                 (cond
-                   (cached-result
-                     (wrap-evt always-evt
-                               (λ_ (unwrap cached-result))))
-
-                   (else
-                     (wrap-evt (producing (ch (make-channel))
-                                 (thread (λ_ (channel-put ch (call/wrap proc)))))
-                               (λ (result)
-                                 (producing (value (unwrap result))
-                                   (set! cached-result result))))))))))
+  (let ((result #f))
+    (wrap-evt (thread (λ_ (set! result (call/wrap proc))))
+              (λ_ (unwrap result)))))
 
 
 (define (call/wrap proc)
