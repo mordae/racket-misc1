@@ -8,7 +8,6 @@
          racket/dict)
 
 (provide
-  (all-from-out racket/dict)
   (contract-out
     (dict-mref (->* (dict?) (#:default any/c) #:rest (listof any/c) any))
     (dict-merge (->* (dict?) () #:rest (listof dict?) dict?))

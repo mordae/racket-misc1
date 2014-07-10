@@ -7,7 +7,6 @@
          racket/list)
 
 (provide
-  (all-from-out racket/list)
   (contract-out
     (list->values (-> list? any))
     (values* (->* () () #:rest list? any))

@@ -2,7 +2,7 @@
 
 @require[scribble/eval]
 
-@require[(for-label racket racket/dict)
+@require[(for-label racket racket/list)
          (for-label "list.rkt")]
 
 @define[list-eval (make-base-eval)]
