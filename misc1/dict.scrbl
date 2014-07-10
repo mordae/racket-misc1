@@ -30,7 +30,7 @@
 
 @defproc[(dict-merge (base dict?) (other dict?) ...) dict?]{
   Merge multiple dictionaries.
-  Type of the base dictionary dicates the type of the result.
+  Type of the base dictionary dictes type of the result.
 
   @examples[#:eval dict-eval
     (dict-merge (hasheq 'apples 1) '((pears . 2)))

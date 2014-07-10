@@ -2,10 +2,11 @@
 
 @require[(for-label racket)]
 
-@title[#:style '(toc)]{Miscellaneous Utilities}
+@;title[#:style '(toc)]{Miscellaneous Utilities}
+@title{Miscellaneous Utilities}
 @author+email["Jan Dvořák" "mordae@anilinux.org"]
 
-@local-table-of-contents[]
+@;local-table-of-contents[]
 
 @include-section["syntax.scrbl"]
 @include-section["dict.scrbl"]
