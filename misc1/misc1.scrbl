@@ -11,7 +11,6 @@
 @include-section["syntax.scrbl"]
 @include-section["dict.scrbl"]
 @include-section["list.scrbl"]
-@include-section["reject.scrbl"]
 @include-section["throw.scrbl"]
 @include-section["async.scrbl"]
 
