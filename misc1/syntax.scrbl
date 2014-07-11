@@ -13,13 +13,17 @@
 @defmodule[misc1/syntax]
 
 
-@defform[(producing (name value) body ...)]{
+@defform*[((producing (name value) body ...)
+           (producing name value ...))]{
   Bind @racket[value] to @racket[name] and perform a few operations,
-  producing the original @racket[value].
+  producing the original @racket[value] or, in the alternative form,
+  just produce the value without any additional body.
 
   @examples[#:eval syntax-eval
     (producing (it (+ 1 2 3))
       (printf "it = ~s\n" it))
+    (producing hello
+      (λ () (hello)))
   ]
 }
 

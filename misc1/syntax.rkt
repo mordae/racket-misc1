@@ -9,10 +9,16 @@
 
 ;; Bind value to a name and perform a few operations,
 ;; producing the original value.
-(define-syntax-rule (producing (name value) body ...)
-  (letrec ((name value))
-    (begin body ...)
-    name))
+(define-syntax producing
+  (syntax-rules ()
+    ((_ (name value) body ...)
+     (letrec ((name value))
+       (begin body ...)
+       name))
+
+    ((_ name value ...)
+     (letrec ((name (begin value ...)))
+       name))))
 
 
 ;; Bind value to name and perform a few operations.
