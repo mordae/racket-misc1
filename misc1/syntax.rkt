@@ -11,6 +11,11 @@
 ;; producing the original value.
 (define-syntax producing
   (syntax-rules ()
+    ((_ ((name value) ...) body ...)
+     (letrec ((name value) ...)
+       (begin body ...)
+       (values name ...)))
+
     ((_ (name value) body ...)
      (letrec ((name value))
        (begin body ...)
