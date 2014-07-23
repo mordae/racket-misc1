@@ -23,18 +23,34 @@
 
 ;; Bind value to name and perform a few operations.
 ;; Returns `#<void>`.
-(define-syntax-rule (using (name value) body ...)
-  (letrec ((name value))
-    (begin body ...)
-    (void)))
+(define-syntax using
+  (syntax-rules ()
+    ((_ ((name value) ...) body ...)
+     (letrec ((name value) ...)
+       (begin body ...)
+       (void)))
+
+    ((_ (name value) body ...)
+     (letrec ((name value))
+       (begin body ...)
+       (void)))))
 
 
 ;; Bind value to name and perform a few operations,
 ;; provided the value is true.  Returns `#<void>`.
-(define-syntax-rule (when* (name value) body ...)
-  (letrec ((name value))
-    (when name
-      (begin body ...))))
+(define-syntax when*
+  (syntax-rules ()
+    ((_ ((name value) ...) body ...)
+     (letrec ((name value) ...)
+       (when (and name ...)
+         (begin body ...)
+         (void))))
+
+    ((_ (name value) body ...)
+     (letrec ((name value))
+       (when name
+         (begin body ...)
+         (void))))))
 
 
 ;; Loop body indefinitely.

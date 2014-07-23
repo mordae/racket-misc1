@@ -27,22 +27,28 @@
   ]
 }
 
-@defform[(using (name value) body ...)]{
-  Bind value to name and perform a few operations, producing @racket[(void)].
+@defform*[((using ((name value) ...) body ...)
+           (using (name value) body ...))]{
+  Bind values to names and perform a few operations,
+  producing @racket[(void)].
 
   @examples[#:eval syntax-eval
-    (using (it 40)
-      (+ it 2))
+    (using ((it 40)
+            (cf -1))
+      (printf "result = ~s\n" (add1 (* cf it))))
   ]
 }
 
-@defform[(when* (name value) body ...)]{
-  Bind value to name and perform a few operations, provided the
-  value is @racket[#true].  Returns @racket[(void)].
+@defform*[((when* ((name value) ...) body ...)
+           (when* (name value) body ...))]{
+  Bind values to names and perform a few operations, provided the
+  values are @racket[#true].  Returns @racket[(void)].
 
   @examples[#:eval syntax-eval
     (when* (it (* 42/13 26/2))
       (printf "result = ~s\n" it))
+    (when* ((foo 1) (bar 2))
+      (printf "foo = ~s, bar = ~s\n" foo bar))
   ]
 }
 
