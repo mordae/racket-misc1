@@ -5,9 +5,13 @@
 
 (require racket/contract)
 
+(require "syntax.rkt")
+
 (provide async)
 
-(require "syntax.rkt")
+(provide
+  (contract-out
+    (async-proc (-> (-> any) evt?))))
 
 
 (struct success
@@ -15,11 +19,6 @@
 
 (struct failure
   (exception))
-
-
-(provide
-  (contract-out
-    (async-proc (-> (-> any) evt?))))
 
 
 (define (async-proc proc)
