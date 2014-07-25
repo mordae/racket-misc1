@@ -11,7 +11,9 @@
 
 (provide
   (contract-out
-    (async-proc (-> (-> any) evt?))))
+    (async-task? predicate/c)
+    (async-task-send (-> async-task? any/c void?))
+    (rename async-proc async-task (-> (-> any) async-task?))))
 
 
 (struct success
@@ -20,12 +22,15 @@
 (struct failure
   (exception))
 
+(struct async-task
+  (evt thread)
+  #:property prop:evt (struct-field-index evt))
+
 
 (define (async-proc proc)
-  (let ((result #f))
-    (wrap-evt (thread (λ_ (set! result (call/wrap proc))))
-              (λ_ (unwrap result)))))
-
+  (let* ((result #f)
+         (thread (thread (λ_ (set! result (call/wrap proc))))))
+    (async-task (wrap-evt thread (λ_ (unwrap result))) thread)))
 
 (define (call/wrap proc)
   (with-handlers ((void (λ (exn)
@@ -33,16 +38,18 @@
     (call-with-values proc (λ results
                              (success results)))))
 
-
 (define (unwrap result)
   (if (success? result)
       (apply values (success-values result))
       (raise (failure-exception result))))
 
-
 (define-syntax-rule (async body ...)
   (async-proc
     (λ () body ...)))
+
+(define (async-task-send at v)
+  (let ((thread (async-task-thread at)))
+    (thread-send thread v)))
 
 
 ; vim:set ts=2 sw=2 et:
