@@ -13,5 +13,6 @@
 @include-section["list.scrbl"]
 @include-section["throw.scrbl"]
 @include-section["async.scrbl"]
+@include-section["evt.scrbl"]
 
 @; vim:set ft=scribble sw=2 ts=2 et:
