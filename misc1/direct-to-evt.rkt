@@ -21,11 +21,24 @@
   (call/cc restart tag))
 
 (define (aborting-input-port in tag)
+  (define-values (buffer-out buffer-in)
+    (make-pipe 4096))
+
+  (define temp
+    (make-bytes 4096))
+
   (define (aborting-read! bstr)
-    (let ((received (read-bytes-avail!* bstr in)))
-      (if (equal? received 0)
-          (abort-to-scheduler tag (wrap-evt in (λ _ 0)))
-          (values received))))
+    (let ((received (read-bytes-avail!* temp in)))
+      (cond
+        ((equal? received 0)
+         (abort-to-scheduler tag (wrap-evt in (λ _ 0))))
+
+        ((eof-object? received)
+         (values eof))
+
+        (else
+         (write-bytes temp buffer-in 0 received)
+         (values buffer-out)))))
 
   (make-input-port/read-to-peek 'aborting-input-port
                                 aborting-read!
