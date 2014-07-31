@@ -12,7 +12,8 @@
     (alarm-in-evt (-> real? evt?))
     (timer-evt (-> real? (-> any) evt?))
     (recurring-evt (-> evt? procedure? evt?))
-    (constant-evt (->* () () #:rest list? evt?))))
+    (constant-evt (->* () () #:rest list? evt?))
+    (cache-evt (-> evt? evt?))))
 
 
 (define (timer-evt interval handler)
@@ -32,6 +33,14 @@
 
 (define (constant-evt . args)
   (wrap-evt always-evt (λ _ (apply values args))))
+
+(define (cache-evt evt)
+  (let ([result #f])
+    (guard-evt (λ _ (if result
+                        (apply constant-evt result)
+                        (wrap-evt evt (λ args
+                                        (set! result args)
+                                        (apply values args))))))))
 
 
 ; vim:set ts=2 sw=2 et:

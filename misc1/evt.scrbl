@@ -53,5 +53,20 @@ Extended events, some building on the new @racket[replace-evt] procedure.
   ]
 }
 
+@defproc[(cache-evt (evt evt?)) evt?]{
+  Simple event that caches first result of it's parent event,
+  to return it if waited for more than once.
+
+  @examples[#:eval evt-eval
+    (define parent-evt (wrap-evt always-evt
+                                 (λ _ (printf "parent producing 42\n") 42)))
+
+    (define child-evt (cache-evt parent-evt))
+
+    (sync child-evt)
+    (sync child-evt)
+  ]
+}
+
 
 @; vim:set ft=scribble sw=2 ts=2 et:
