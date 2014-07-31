@@ -10,19 +10,24 @@
   (contract-out
     (list->values (-> list? any))
     (values* (->* () () #:rest list? any))
+    (rassoc (-> predicate/c list? any/c))
     (split-every (-> list? exact-positive-integer? (listof list?)))))
 
 (provide let-list)
 
 
+(define (rassoc key lst)
+  (define (match? item)
+    (let ((item-key (cdr item)))
+      (eq? key item-key)))
+  (findf match? lst))
+
 (define (list->values lst)
   (apply values lst))
-
 
 (define (values* . value-or-list)
   (list->values
     (apply list* value-or-list)))
-
 
 (define (split-every lst index)
   (let-values (((head tail) (split-at lst index)))
