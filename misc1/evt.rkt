@@ -11,7 +11,8 @@
   (contract-out
     (alarm-in-evt (-> real? evt?))
     (timer-evt (-> real? (-> any) evt?))
-    (recurring-evt (-> evt? procedure? evt?))))
+    (recurring-evt (-> evt? procedure? evt?))
+    (constant-evt (->* () () #:rest list? evt?))))
 
 
 (define (timer-evt interval handler)
@@ -28,6 +29,9 @@
     (replace-evt base-evt (λ args
                             (apply handler args)
                             (values new-evt)))))
+
+(define (constant-evt . args)
+  (wrap-evt always-evt (λ _ (apply values args))))
 
 
 ; vim:set ts=2 sw=2 et:

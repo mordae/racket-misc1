@@ -45,5 +45,13 @@ Extended events, some building on the new @racket[replace-evt] procedure.
   ]
 }
 
+@defproc[(constant-evt (arg any/c) ...) evt?]{
+  Simple event that immediately produces specified arguments.
+
+  @examples[#:eval evt-eval
+    (sync (constant-evt 1 2 3))
+  ]
+}
+
 
 @; vim:set ft=scribble sw=2 ts=2 et:
