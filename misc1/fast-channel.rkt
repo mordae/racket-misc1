@@ -11,9 +11,9 @@
   (contract-out
     (fast-channel? predicate/c)
     (make-fast-channel (-> fast-channel?))
-    (fast-channel-put (-> fast-channel? any/c void?))
-    (fast-channel-get (-> fast-channel? any/c))
-    (fast-channel-try-get (-> fast-channel? any/c))))
+    (fast-channel-put (->* (fast-channel?) () #:rest list? void?))
+    (fast-channel-get (-> fast-channel? any))
+    (fast-channel-try-get (-> fast-channel? any))))
 
 
 (struct fast-channel
@@ -34,7 +34,7 @@
 (define (make-evt channel)
   (wrap-evt (fast-channel-bell channel)
             (λ _ (call-with-semaphore (fast-channel-lock channel)
-                                      (λ _ (get channel))))))
+                                      (λ _ (apply values (get channel)))))))
 
 (define (fast-channel-get channel)
   (sync channel))
@@ -42,9 +42,9 @@
 (define (fast-channel-try-get channel)
   (sync/timeout 0 channel))
 
-(define (fast-channel-put channel value)
+(define (fast-channel-put channel . args)
   (call-with-semaphore (fast-channel-lock channel)
-                       (λ _ (put channel value))))
+                       (λ _ (put channel args))))
 
 (define (put channel value)
   (cond
