@@ -7,6 +7,8 @@
          racket/control
          racket/port)
 
+(require "evt.rkt")
+
 (provide
   (contract-out
     (direct->evt/input (-> input-port? (-> input-port? any) evt?))
@@ -46,25 +48,47 @@
 
 (define (direct->evt/input in proc)
   (let* ((tag (make-continuation-prompt-tag 'block->evt/input))
-         (in/a (aborting-input-port in tag)))
+         (in/a (aborting-input-port in tag))
+         (current-evt #f))
     (define (start)
       (let ((result (proc in/a)))
-        (wrap-evt always-evt (λ _ result))))
+        (restart)
+        (constant-evt result)))
 
-    (replace-evt always-evt
-                 (λ _ (call/prompt start tag values)))))
+    (define (abort evt)
+      (set! current-evt evt)
+      (values evt))
+
+    (define (restart)
+      (set! current-evt
+        (replace-evt always-evt
+                     (λ _ (call/prompt start tag abort)))))
+
+    (restart)
+    (guard-evt (λ _ current-evt))))
 
 (define (direct->evt proc)
-  (let ((tag (make-continuation-prompt-tag 'block->evt)))
+  (let ((tag (make-continuation-prompt-tag 'block->evt))
+        (current-evt #f))
     (define (wait evt)
       (abort-to-scheduler tag evt))
 
     (define (start)
       (let ((result (proc wait)))
-        (wrap-evt always-evt (λ _ result))))
+        (restart)
+        (constant-evt result)))
 
-    (replace-evt always-evt
-                 (λ _ (call/prompt start tag values)))))
+    (define (abort evt)
+      (set! current-evt evt)
+      (values evt))
+
+    (define (restart)
+      (set! current-evt
+        (replace-evt always-evt
+                     (λ _ (call/prompt start tag abort)))))
+
+    (restart)
+    (guard-evt (λ _ current-evt))))
 
 
 ; vim:set ts=2 sw=2 et:
