@@ -95,6 +95,16 @@
   ]
 }
 
+@defform[(with-semaphore sema body ...)]{
+  Shortcut of @racket[(call-with-semaphore sema (λ _ body ...))].
+
+  @examples[#:eval syntax-eval
+    (let ((sema (make-semaphore 1)))
+      (with-semaphore sema
+        'protected))
+  ]
+}
+
 
 @; vim:set ft=scribble sw=2 ts=2 et:
 

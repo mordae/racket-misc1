@@ -105,4 +105,9 @@
   (λ _ body ...))
 
 
+;; Shortcut to call-with-semaphore.
+(define-syntax-rule (with-semaphore sema body ...)
+  (call-with-semaphore sema (λ _ body ...)))
+
+
 ; vim:set ts=2 sw=2 et:
