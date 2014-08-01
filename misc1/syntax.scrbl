@@ -105,6 +105,42 @@
   ]
 }
 
+@defform[(with-output-bytes body ...)]{
+  Shortcut of @racket[(with-output-to-bytes (λ _ body ...))].
+
+  @examples[#:eval syntax-eval
+    (with-output-bytes
+      (write-byte 64))
+  ]
+}
+
+@defform[(with-input-bytes bstr body ...)]{
+  Shortcut of @racket[(with-input-from-bytes bstr (λ _ body ...))].
+
+  @examples[#:eval syntax-eval
+    (with-input-bytes #"hello"
+      (read-byte))
+  ]
+}
+
+@defform[(with-output-string body ...)]{
+  Shortcut of @racket[(with-output-to-string (λ _ body ...))].
+
+  @examples[#:eval syntax-eval
+    (with-output-string
+      (write-byte 64))
+  ]
+}
+
+@defform[(with-input-string str body ...)]{
+  Shortcut of @racket[(with-input-from-string str (λ _ body ...))].
+
+  @examples[#:eval syntax-eval
+    (with-input-string "hello"
+      (read-byte))
+  ]
+}
+
 
 @; vim:set ft=scribble sw=2 ts=2 et:
 

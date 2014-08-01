@@ -3,6 +3,8 @@
 ; Syntax Extensions
 ;
 
+(require racket/port)
+
 (provide
   (all-defined-out))
 
@@ -105,9 +107,23 @@
   (λ _ body ...))
 
 
-;; Shortcut to call-with-semaphore.
+;; Shortcut of call-with-semaphore.
 (define-syntax-rule (with-semaphore sema body ...)
   (call-with-semaphore sema (λ _ body ...)))
+
+
+;; Shortcuts of byte and string streams.
+(define-syntax-rule (with-output-bytes body ...)
+  (with-output-to-bytes (λ () body ...)))
+
+(define-syntax-rule (with-input-bytes bstr body ...)
+  (with-input-from-bytes bstr (λ () body ...)))
+
+(define-syntax-rule (with-output-string body ...)
+  (with-output-to-string (λ () body ...)))
+
+(define-syntax-rule (with-input-string str body ...)
+  (with-input-from-string str (λ () body ...)))
 
 
 ; vim:set ts=2 sw=2 et:
