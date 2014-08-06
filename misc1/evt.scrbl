@@ -22,13 +22,13 @@ Extended events, some building on the new @racket[replace-evt] procedure.
 }
 
 @defproc[(timer-evt (msecs real?) (handler (-> any))) evt?]{
-  Recurring event that executes the @racket[handler] every
-  @racket[msecs] milliseconds from now on. It never produces any
-  synchronization result.
+  Recurring event that executes the @racket[handler] immediately and
+  then repeatedly after @racket[msecs] milliseconds. It never produces
+  any synchronization result.
 
   @examples[#:eval evt-eval
     (sync (alarm-in-evt 1000)
-          (timer-evt 300 (λ _ (printf "hello\n"))))
+          (timer-evt 400 (λ _ (printf "hello\n"))))
   ]
 }
 

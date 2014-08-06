@@ -17,7 +17,7 @@
 
 
 (define (timer-evt interval handler)
-  (let ((alarm (alarm-in-evt interval)))
+  (let ((alarm (alarm-in-evt 0)))
     (producing new-evt
       (guard-evt
         (Λ (replace-evt alarm
