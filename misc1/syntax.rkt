@@ -107,6 +107,11 @@
   (λ _ body ...))
 
 
+;; Alias of thunk - a lambda not accepting any arguments.
+(define-syntax-rule (Λ body ...)
+  (λ () body ...))
+
+
 ;; Shortcut of call-with-semaphore.
 (define-syntax-rule (with-semaphore sema body ...)
   (call-with-semaphore sema (λ _ body ...)))
