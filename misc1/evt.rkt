@@ -17,9 +17,13 @@
 
 
 (define (timer-evt interval handler)
-  (replace-evt (alarm-in-evt interval)
-               (λ_ (begin0 (timer-evt interval handler)
-                           (handler)))))
+  (let ((alarm (alarm-in-evt interval)))
+    (producing new-evt
+      (guard-evt
+        (Λ (replace-evt alarm
+                        (λ _
+                          (set! alarm (alarm-in-evt interval))
+                          (begin0 new-evt (handler)))))))))
 
 (define (alarm-in-evt msecs)
   (let ((now (current-inexact-milliseconds)))
@@ -36,11 +40,11 @@
 
 (define (cache-evt evt)
   (let ([result #f])
-    (guard-evt (λ _ (if result
-                        (apply constant-evt result)
-                        (wrap-evt evt (λ args
-                                        (set! result args)
-                                        (apply values args))))))))
+    (guard-evt (Λ (if result
+                      (apply constant-evt result)
+                      (wrap-evt evt (λ args
+                                      (set! result args)
+                                      (apply values args))))))))
 
 
 ; vim:set ts=2 sw=2 et:
