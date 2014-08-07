@@ -32,7 +32,7 @@ Extended events, some building on the new @racket[replace-evt] procedure.
   ]
 }
 
-@defproc[(recurring-evt (base-evt evt?) (handler procedure?)) evt?]{
+@defproc[(recurring-evt (base-evt evt?) (handler procedure? void)) evt?]{
   Recurring event that never produces any synchronization result.
 
   @examples[#:eval evt-eval

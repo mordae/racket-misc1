@@ -11,7 +11,7 @@
   (contract-out
     (alarm-in-evt (-> real? evt?))
     (timer-evt (-> real? (-> any) evt?))
-    (recurring-evt (-> evt? procedure? evt?))
+    (recurring-evt (->* (evt?) (procedure?) evt?))
     (constant-evt (->* () () #:rest list? evt?))
     (cache-evt (-> evt? evt?))))
 
@@ -29,7 +29,7 @@
   (let ((now (current-inexact-milliseconds)))
     (alarm-evt (+ now msecs))))
 
-(define (recurring-evt base-evt handler)
+(define (recurring-evt base-evt (handler void))
   (producing new-evt
     (replace-evt base-evt (λ args
                             (apply handler args)
