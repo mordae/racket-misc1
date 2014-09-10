@@ -1,6 +1,7 @@
 #lang scribble/manual
 
 @require[scribble/eval]
+@require["syntax.rkt"]
 
 @require[(for-label racket)
          (for-label "evt.rkt")]
@@ -11,39 +12,42 @@
 
 @title{Events}
 
-Extended events, some building on the new @racket[replace-evt] procedure.
+Extended events, some building on the new @racket[replace-evt]
+procedure when available.
 
 @defmodule[misc1/evt]
+
+@when-defined[replace-evt]{
+  @defproc[(timer-evt (msecs real?) (handler (-> any))) evt?]{
+    Recurring event that executes the @racket[handler] immediately and
+    then repeatedly after @racket[msecs] milliseconds. It never produces
+    any synchronization result.
+
+    @examples[#:eval evt-eval
+      (sync (alarm-in-evt 1000)
+            (timer-evt 400 (λ _ (printf "hello\n"))))
+    ]
+  }
+
+  @defproc[(recurring-evt (base-evt evt?) (handler procedure? void)) evt?]{
+    Recurring event that never produces any synchronization result.
+
+    @examples[#:eval evt-eval
+      (let ((channel (make-async-channel)))
+        (for ((i 3))
+          (async-channel-put channel i))
+        (sync (alarm-in-evt 1000)
+              (recurring-evt channel
+                             (λ (item)
+                               (printf "item ~s\n" item)))))
+    ]
+  }
+}
 
 
 @defproc[(alarm-in-evt (msecs real?)) evt?]{
   Create an alarm event that is up in given number of milliseconds,
   counting from now. Just an useful shortcut.
-}
-
-@defproc[(timer-evt (msecs real?) (handler (-> any))) evt?]{
-  Recurring event that executes the @racket[handler] immediately and
-  then repeatedly after @racket[msecs] milliseconds. It never produces
-  any synchronization result.
-
-  @examples[#:eval evt-eval
-    (sync (alarm-in-evt 1000)
-          (timer-evt 400 (λ _ (printf "hello\n"))))
-  ]
-}
-
-@defproc[(recurring-evt (base-evt evt?) (handler procedure? void)) evt?]{
-  Recurring event that never produces any synchronization result.
-
-  @examples[#:eval evt-eval
-    (let ((channel (make-async-channel)))
-      (for ((i 3))
-        (async-channel-put channel i))
-      (sync (alarm-in-evt 1000)
-            (recurring-evt channel
-                           (λ (item)
-                             (printf "item ~s\n" item)))))
-  ]
 }
 
 @defproc[(constant-evt (arg any/c) ...) evt?]{
