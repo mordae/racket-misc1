@@ -142,5 +142,15 @@
 }
 
 
-@; vim:set ft=scribble sw=2 ts=2 et:
+@defform[(when-defined name body ...)]{
+  Expands the body only when given @racket[name] is defined.
 
+  @examples[#:eval syntax-eval
+    (when-defined replace-evt 'have-replace-evt)
+    (when-defined frobnicate 'have-frobnication)
+    (when-defined foldl 'have-folds)
+  ]
+}
+
+
+@; vim:set ft=scribble sw=2 ts=2 et:

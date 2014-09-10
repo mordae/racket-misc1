@@ -5,6 +5,9 @@
 
 (require racket/port)
 
+(require
+  (for-syntax racket/base))
+
 (provide
   (all-defined-out))
 
@@ -129,6 +132,15 @@
 
 (define-syntax-rule (with-input-string str body ...)
   (with-input-from-string str (λ () body ...)))
+
+
+;; Expands body only when an identifier is defined.
+(define-syntax (when-defined stx)
+  (syntax-case stx ()
+    ((_ name body ...)
+     (if (identifier-binding #'name)
+         #'(begin body ...)
+         #'(void)))))
 
 
 ; vim:set ts=2 sw=2 et:
