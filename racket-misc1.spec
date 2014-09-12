@@ -4,7 +4,7 @@
 %global collection misc1
 
 Name:		racket-misc1
-Version:	20140904
+Version:	20140912
 Release:	1%{?dist}
 Summary:	miscellaneous utilities
 
@@ -31,11 +31,12 @@ Library with convenience syntactic forms and procedures.
 %{_libexecdir}/racket-install %{collection}
 
 %post
-raco link --installation --root %{pkgsdir}/%{collection}
+raco pkg install --installation --no-setup --force --deps force \
+                 --link %{pkgsdir}/%{collection}
 raco setup --no-user --doc-index --only %{collection} >/dev/null
 
 %preun
-raco link --installation --remove %{pkgsdir}/%{collection}
+raco pkg remove --installation --no-setup --force %{collection} >/dev/null
 
 %postun
 raco setup --no-user --doc-index --tidy >/dev/null
