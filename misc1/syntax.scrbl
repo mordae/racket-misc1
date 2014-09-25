@@ -52,6 +52,21 @@
   ]
 }
 
+@defform[(recursive (name ...) body ...)]{
+  Bind values produced by the body to specified names in a recursive manner.
+  This form can be used to produce self-referential events and similar
+  exotic constructs.
+
+  @examples[#:eval syntax-eval
+    (recursive (a b)
+      (values 1 2))
+    ((recursive (fact)
+       (λ (n)
+         (if (= 0 n) 1
+             (* n (fact (sub1 n)))))) 5)
+  ]
+}
+
 @defform[(loop body ...)]{
   Loop body indefinitely.
 }

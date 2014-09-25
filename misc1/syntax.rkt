@@ -63,6 +63,12 @@
          (void))))))
 
 
+;; Produce several interdependent values.
+(define-syntax-rule (recursive (name ...) body ...)
+  (letrec-values (((name ...) (begin body ...)))
+    (values name ...)))
+
+
 ;; Loop body indefinitely.
 (define-syntax-rule (loop body ...)
   (let loop ()
