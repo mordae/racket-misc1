@@ -22,7 +22,7 @@
 
   (define (timer-evt interval handler)
     (let ((alarm (alarm-in-evt 0)))
-      (producing new-evt
+      (recursive (new-evt)
         (guard-evt
           (Λ (replace-evt alarm
                           (λ _
@@ -30,7 +30,7 @@
                             (begin0 new-evt (handler)))))))))
 
   (define (recurring-evt base-evt (handler void))
-    (producing new-evt
+    (recursive (new-evt)
       (replace-evt base-evt (λ args
                               (apply handler args)
                               (values new-evt))))))

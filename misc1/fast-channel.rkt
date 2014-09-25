@@ -24,7 +24,7 @@
 
 
 (define (make-fast-channel)
-  (producing channel
+  (recursive (channel)
     (fast-channel #f
                   #f
                   (make-semaphore 1)
@@ -63,7 +63,7 @@
 
 (define (get channel)
   (let ([old-head (fast-channel-head channel)])
-    (producing (value (mcar old-head))
+    (producing ((value (mcar old-head)))
       (set-fast-channel-head! channel (mcdr old-head))
       (unless (mcdr old-head)
         (set-fast-channel-tail! channel #f)))))

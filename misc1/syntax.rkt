@@ -12,55 +12,29 @@
   (all-defined-out))
 
 
-;; Bind value to a name and perform a few operations,
-;; producing the original value.
-(define-syntax producing
-  (syntax-rules ()
-    ((_ ((name value) ...) body ...)
-     (letrec ((name value) ...)
-       (begin body ...)
-       (values name ...)))
-
-    ((_ (name value) body ...)
-     (letrec ((name value))
-       (begin body ...)
-       name))
-
-    ((_ name value ...)
-     (letrec ((name (begin value ...)))
-       name))))
+;; Bind values to a names and perform a few operations,
+;; producing the original values.
+(define-syntax-rule (producing ((name value) ...) body ...)
+  (letrec ((name value) ...)
+   (begin body ...)
+   (values name ...)))
 
 
-;; Bind value to name and perform a few operations.
+;; Bind values to names and perform a few operations.
 ;; Returns `#<void>`.
-(define-syntax using
-  (syntax-rules ()
-    ((_ ((name value) ...) body ...)
-     (letrec ((name value) ...)
-       (begin body ...)
-       (void)))
-
-    ((_ (name value) body ...)
-     (letrec ((name value))
-       (begin body ...)
-       (void)))))
+(define-syntax-rule (using ((name value) ...) body ...)
+  (letrec ((name value) ...)
+   (begin body ...)
+   (void)))
 
 
-;; Bind value to name and perform a few operations,
-;; provided the value is true.  Returns `#<void>`.
-(define-syntax when*
-  (syntax-rules ()
-    ((_ ((name value) ...) body ...)
-     (letrec ((name value) ...)
-       (when (and name ...)
-         (begin body ...)
-         (void))))
-
-    ((_ (name value) body ...)
-     (letrec ((name value))
-       (when name
-         (begin body ...)
-         (void))))))
+;; Bind values to names and perform a few operations,
+;; provided the values are true.  Returns `#<void>`.
+(define-syntax-rule (when* ((name value) ...) body ...)
+  (letrec ((name value) ...)
+    (when (and name ...)
+      (begin body ...)
+      (void))))
 
 
 ;; Produce several interdependent values.

@@ -13,29 +13,25 @@
 @defmodule[misc1/syntax]
 
 
-@defform*[((producing (name value) body ...)
-           (producing name value ...))]{
-  Bind @racket[value] to @racket[name] and perform a few operations,
-  producing the original @racket[value] or, in the alternative form,
-  just produce the value without any additional body.
+@defform[(producing ((name value) ...) body ...)]{
+  Recursively binds values to names for the duration of the body,
+  producing the original values.
 
   @examples[#:eval syntax-eval
-    (producing (it (+ 1 2 3))
-      (printf "it = ~s\n" it))
-    (producing hello
-      (λ () (hello)))
+    (producing ((a (+ 1 2 3))
+                (b (* 1 2 3)))
+      (printf "a = ~s, b = ~s\n" a b))
   ]
 }
 
-@defform*[((using ((name value) ...) body ...)
-           (using (name value) body ...))]{
-  Bind values to names and perform a few operations,
+@defform[(using ((name value) ...) body ...)]{
+  Recursively binds values to names for the duration of the body,
   producing @racket[(void)].
 
   @examples[#:eval syntax-eval
-    (using ((it 40)
-            (cf -1))
-      (printf "result = ~s\n" (add1 (* cf it))))
+    (using ((variable 40)
+            (coefficient -13))
+      (printf "result = ~s\n" (add1 (* value coefficient))))
   ]
 }
 
@@ -45,10 +41,12 @@
   values are @racket[#true].  Returns @racket[(void)].
 
   @examples[#:eval syntax-eval
-    (when* (it (* 42/13 26/2))
-      (printf "result = ~s\n" it))
-    (when* ((foo 1) (bar 2))
-      (printf "foo = ~s, bar = ~s\n" foo bar))
+    (when* ((x 1)
+            (y 2))
+      (printf "x = ~s, y = ~s\n" x y))
+    (when* ((k (* 42/13 26/2))
+            (z (= 13 42)))
+      (printf "result = ~s\n" k))
   ]
 }
 
