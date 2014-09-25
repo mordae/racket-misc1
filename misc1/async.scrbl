@@ -15,13 +15,13 @@
 This module provides a simple way to run a piece of code in a background
 thread, getting it's result back via Racket's integrated event system.
 
-@defproc[(async-proc (proc (-> any))) evt?]{
+@defproc[(async-task (proc (-> any))) evt?]{
   Run thunk in a @racket[thread] and obtain it's cached result
   (or exception) using an event.
 
   @examples[#:eval async-eval
     (define result-evt
-      (async-proc (λ ()
+      (async-task (λ ()
                     (sleep 1/10) 42)))
 
     (sync/timeout 1/20 result-evt)
@@ -31,7 +31,7 @@ thread, getting it's result back via Racket's integrated event system.
 }
 
 @defform[(async body ...)]{
-  Syntactic alternative to @racket[async-proc].
+  Syntactic alternative to @racket[async-task].
 
   @examples[#:eval async-eval
     (sync (async (+ 1 1)))
