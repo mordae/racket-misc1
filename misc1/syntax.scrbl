@@ -31,7 +31,7 @@
   @examples[#:eval syntax-eval
     (using ((variable 40)
             (coefficient -13))
-      (printf "result = ~s\n" (add1 (* value coefficient))))
+      (printf "result = ~s\n" (add1 (* variable coefficient))))
   ]
 }
 
