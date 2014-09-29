@@ -43,12 +43,10 @@
   (wrap-evt always-evt (λ _ (apply values args))))
 
 (define (cache-evt evt)
-  (let ([result #f])
-    (guard-evt (Λ (if result
-                      (apply constant-evt result)
-                      (wrap-evt evt (λ args
-                                      (set! result args)
-                                      (apply values args))))))))
+  (letrec ((new-evt (wrap-evt evt (λ args
+                                    (set! new-evt (apply constant-evt args))
+                                    (apply values args)))))
+    (guard-evt (Λ new-evt))))
 
 
 ; vim:set ts=2 sw=2 et:
