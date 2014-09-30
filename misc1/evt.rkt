@@ -11,7 +11,8 @@
   (contract-out
     (alarm-in-evt (-> real? evt?))
     (constant-evt (->* () () #:rest list? evt?))
-    (cache-evt (-> evt? evt?))))
+    (cache-evt (-> evt? evt?))
+    (trigger-evt (-> (values (->* () () #:rest any/c void?) evt?)))))
 
 
 (when-defined replace-evt
@@ -47,6 +48,16 @@
                                     (set! new-evt (apply constant-evt args))
                                     (apply values args)))))
     (guard-evt (Λ new-evt))))
+
+(define (trigger-evt)
+  (let ((semaphore (make-semaphore 0))
+        (results #f))
+    (values (λ args
+              (set! results args)
+              (semaphore-post semaphore))
+            (wrap-evt (semaphore-peek-evt semaphore)
+                      (λ (semaphore)
+                        (apply values results))))))
 
 
 ; vim:set ts=2 sw=2 et:

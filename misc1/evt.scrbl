@@ -73,5 +73,18 @@ procedure when available.
   ]
 }
 
+@defproc[(trigger-evt) (values (-> (value any/c) ... void?) evt?)]{
+  Create an event that can be triggered by an associated procedure.
+
+  @examples[#:eval evt-eval
+    (define-values (trigger evt)
+      (trigger-evt))
+
+    (sync/timeout 0 evt)
+    (trigger 13 42)
+    (sync/timeout 0 evt)
+  ]
+}
+
 
 @; vim:set ft=scribble sw=2 ts=2 et:
