@@ -15,6 +15,6 @@
 @include-section["async.scrbl"]
 @include-section["fast-channel.scrbl"]
 @include-section["evt.scrbl"]
-@include-section["rwlock.scrbl"]
+@include-section["locking.scrbl"]
 
 @; vim:set ft=scribble sw=2 ts=2 et:
