@@ -13,7 +13,7 @@
 (provide
   (contract-out
     (rwlock? predicate/c)
-    (make-rwlock (-> rwlock?))
+    (make-rwlock (->* () (semaphore?) rwlock?))
     (call-with-read-lock (-> rwlock? (-> any) any))
     (call-with-write-lock (-> rwlock? (-> any) any))))
 
@@ -22,10 +22,9 @@
   (wlock rlock (readers #:mutable)))
 
 
-(define (make-rwlock)
-  (rwlock (make-semaphore 1)
-          (make-semaphore 1)
-          0))
+(define (make-rwlock (wlock (make-semaphore 1)))
+  (let ((rlock (make-semaphore 1)))
+    (rwlock wlock rlock 0)))
 
 
 (define-syntax-rule (with-read-lock rw-l body ...)

@@ -15,8 +15,10 @@ Single writer / multiple readers locking primitive.
 
 @defmodule[misc1/rwlock]
 
-@defproc[(make-rwlock) rwlock?]{
-  Create new, unlocked read-write lock.
+@defproc[(make-rwlock (wlock semaphore? (make-semaphore 1))) rwlock?]{
+  Create new read-write lock, optionally reusing specified semaphore as
+  write lock. External write lock can be useful for situations where the
+  rwlock must start write-locked.
 
   @examples[#:eval rwlock-eval
     (define lock (make-rwlock))
