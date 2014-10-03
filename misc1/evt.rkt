@@ -12,7 +12,23 @@
     (alarm-in-evt (-> real? evt?))
     (constant-evt (->* () () #:rest list? evt?))
     (cache-evt (-> evt? evt?))
-    (trigger-evt (-> (values (->* () () #:rest any/c void?) evt?)))))
+
+    (trigger-evt? predicate/c)
+    (make-trigger-evt (-> trigger-evt?))
+    (trigger! (->* (trigger-evt?) () #:rest list? void?))
+
+    (epoch-evt? predicate/c)
+    (make-epoch-evt (-> epoch-evt?))
+    (epoch-evt-advance! (-> epoch-evt? void?))))
+
+
+(struct trigger-evt
+  (lock (results #:mutable) evt)
+  #:property prop:evt (struct-field-index evt))
+
+(struct epoch-evt
+  ((trigger-evt #:mutable) evt)
+  #:property prop:evt (struct-field-index evt))
 
 
 (when-defined replace-evt
@@ -49,15 +65,27 @@
                                     (apply values args)))))
     (guard-evt (Λ new-evt))))
 
-(define (trigger-evt)
-  (let ((semaphore (make-semaphore 0))
-        (results #f))
-    (values (λ args
-              (set! results args)
-              (semaphore-post semaphore))
-            (wrap-evt (semaphore-peek-evt semaphore)
-                      (λ (semaphore)
-                        (apply values results))))))
+(define (make-trigger-evt)
+  (recursive (self)
+    (let ((lock (make-semaphore 0)))
+      (trigger-evt lock #f
+                   (wrap-evt (semaphore-peek-evt lock)
+                             (λ (semaphore)
+                               (apply values (trigger-evt-results self))))))))
+
+(define (trigger! evt . args)
+  (set-trigger-evt-results! evt args)
+  (semaphore-post (trigger-evt-lock evt)))
+
+(define (make-epoch-evt)
+  (recursive (self)
+    (epoch-evt (make-trigger-evt)
+               (guard-evt (Λ (epoch-evt-trigger-evt self))))))
+
+(define (epoch-evt-advance! evt)
+  (let ((old-trigger-evt (epoch-evt-trigger-evt evt)))
+    (set-epoch-evt-trigger-evt! evt (make-trigger-evt))
+    (trigger! old-trigger-evt)))
 
 
 ; vim:set ts=2 sw=2 et:
