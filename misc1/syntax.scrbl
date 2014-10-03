@@ -35,8 +35,7 @@
   ]
 }
 
-@defform*[((when* ((name value) ...) body ...)
-           (when* (name value) body ...))]{
+@defform[(when* ((name value) ...) body ...)]{
   Bind values to names and perform a few operations, provided the
   values are @racket[#true].  Returns @racket[(void)].
 
@@ -44,9 +43,6 @@
     (when* ((x 1)
             (y 2))
       (printf "x = ~s, y = ~s\n" x y))
-    (when* ((k (* 42/13 26/2))
-            (z (= 13 42)))
-      (printf "result = ~s\n" k))
   ]
 }
 
