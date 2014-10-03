@@ -73,16 +73,50 @@ procedure when available.
   ]
 }
 
-@defproc[(trigger-evt) (values (-> (value any/c) ... void?) evt?)]{
-  Create an event that can be triggered by an associated procedure.
+@defproc[(trigger-evt? (v any/c)) boolean?]{
+  Predicate to identify trigger events.
+}
+
+@defproc[(make-trigger-evt) evt?]{
+  Create an event that can be triggered later on.
 
   @examples[#:eval evt-eval
-    (define-values (trigger evt)
-      (trigger-evt))
+    (define t-e (make-trigger-evt))
+    (sync/timeout 0 t-e)
+  ]
+}
 
-    (sync/timeout 0 evt)
-    (trigger 13 42)
-    (sync/timeout 0 evt)
+@defproc[(trigger! (evt trigger-evt?) (v any/c) ...) void?]{
+  Cause specified trigger event to stop blocking and start producing
+  given results instead.
+
+  @examples[#:eval evt-eval
+    (trigger! t-e 13 42)
+    (sync/timeout 0 t-e)
+  ]
+}
+
+@defproc[(epoch-evt? (v any/c)) boolean?]{
+  Predicate to identify epoch events.
+}
+
+@defproc[(make-epoch-evt) evt?]{
+  Create an event that can be triggered to unblock all waiters and start
+  a new epoch, blocking newcomers.
+
+  @examples[#:eval evt-eval
+    (define ee (make-epoch-evt))
+  ]
+}
+
+@defproc[(epoch-evt-advance! (evt epoch-evt?) (v any/c) ...) void?]{
+  Advance given epoch event, unblocking all threads waiting for it.
+
+  @examples[#:eval evt-eval
+    (thread (λ ()
+              (sleep 1)
+              (epoch-evt-advance! ee 'result)))
+    (sync ee)
   ]
 }
 

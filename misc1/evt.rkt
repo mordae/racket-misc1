@@ -19,7 +19,7 @@
 
     (epoch-evt? predicate/c)
     (make-epoch-evt (-> epoch-evt?))
-    (epoch-evt-advance! (-> epoch-evt? void?))))
+    (epoch-evt-advance! (->* (epoch-evt?) () #:rest list? void?))))
 
 
 (struct trigger-evt
@@ -82,10 +82,10 @@
     (epoch-evt (make-trigger-evt)
                (guard-evt (Λ (epoch-evt-trigger-evt self))))))
 
-(define (epoch-evt-advance! evt)
+(define (epoch-evt-advance! evt . args)
   (let ((old-trigger-evt (epoch-evt-trigger-evt evt)))
     (set-epoch-evt-trigger-evt! evt (make-trigger-evt))
-    (trigger! old-trigger-evt)))
+    (apply trigger! old-trigger-evt args)))
 
 
 ; vim:set ts=2 sw=2 et:
