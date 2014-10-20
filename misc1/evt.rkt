@@ -16,6 +16,7 @@
     (trigger-evt? predicate/c)
     (make-trigger-evt (-> trigger-evt?))
     (trigger! (->* (trigger-evt?) () #:rest list? void?))
+    (cancel! (-> trigger-evt? void?))
 
     (epoch-evt? predicate/c)
     (make-epoch-evt (-> epoch-evt?))
@@ -74,8 +75,22 @@
                                (apply values (trigger-evt-results self))))))))
 
 (define (trigger! evt . args)
-  (set-trigger-evt-results! evt args)
-  (semaphore-post (trigger-evt-lock evt)))
+  (let ((lock (trigger-evt-lock evt)))
+    ;; Ensure that the trigger is locked.
+    (semaphore-try-wait? lock)
+
+    ;; Set new result values.
+    (set-trigger-evt-results! evt args)
+
+    ;; Open the trigger.
+    (semaphore-post lock)))
+
+(define (cancel! evt)
+  ;; Ensure that the trigger is locked.
+  (semaphore-try-wait? (trigger-evt-lock evt))
+
+  ;; Free old result values.
+  (set-trigger-evt-results! evt #f))
 
 (define (make-epoch-evt)
   (recursive (self)

@@ -96,6 +96,15 @@ procedure when available.
   ]
 }
 
+@defproc[(cancel! (evt trigger-evt?)) void?]{
+  Cancel specified trigger event, causing it to block again.
+
+  @examples[#:eval evt-eval
+    (cancel! t-e)
+    (sync/timeout 0 t-e)
+  ]
+}
+
 @defproc[(epoch-evt? (v any/c)) boolean?]{
   Predicate to identify epoch events.
 }
