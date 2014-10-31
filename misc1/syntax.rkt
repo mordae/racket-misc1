@@ -85,11 +85,6 @@
       (else (loop)))))
 
 
-;; Alias of lambda accepting any number of arguments, ignoring them all.
-(define-syntax-rule (λ_ body ...)
-  (λ _ body ...))
-
-
 ;; Alias of thunk - a lambda not accepting any arguments.
 (define-syntax-rule (Λ body ...)
   (λ () body ...))

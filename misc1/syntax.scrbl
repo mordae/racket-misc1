@@ -96,14 +96,6 @@
   ]
 }
 
-@defform[(λ_ body ...)]{
-  Alias of @racket[λ] accepting any number of arguments, ignoring them all.
-
-  @examples[#:eval syntax-eval
-    (map (λ_ 1) '(a b c))
-  ]
-}
-
 @defform[(with-semaphore sema body ...)]{
   Shortcut of @racket[(call-with-semaphore sema (λ _ body ...))].
 
