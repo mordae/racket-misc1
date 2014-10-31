@@ -13,7 +13,10 @@
     (make-fast-channel (-> fast-channel?))
     (fast-channel-put (->* (fast-channel?) () #:rest list? void?))
     (fast-channel-get (-> fast-channel? any))
-    (fast-channel-try-get (-> fast-channel? any))))
+    (fast-channel-try-get (-> fast-channel? any))
+    (fast-channel-peek (-> fast-channel? any))
+    (fast-channel-try-peek (-> fast-channel? any))
+    (fast-channel-peek-evt (-> fast-channel? evt?))))
 
 
 (struct fast-channel
@@ -33,14 +36,28 @@
 
 (define (make-evt channel)
   (wrap-evt (fast-channel-bell channel)
-            (λ _ (call-with-semaphore (fast-channel-lock channel)
-                                      (λ _ (apply values (get channel)))))))
+            (λ (bell)
+              (with-semaphore (fast-channel-lock channel)
+                (apply values (get channel))))))
+
+(define (fast-channel-peek-evt channel)
+  (wrap-evt (semaphore-peek-evt
+              (fast-channel-bell channel))
+            (λ (bell)
+              (with-semaphore (fast-channel-lock channel)
+                (apply values (peek channel))))))
 
 (define (fast-channel-get channel)
   (sync channel))
 
+(define (fast-channel-peek channel)
+  (sync (fast-channel-peek-evt channel)))
+
 (define (fast-channel-try-get channel)
   (sync/timeout 0 channel))
+
+(define (fast-channel-try-peek channel)
+  (sync/timeout 0 (fast-channel-peek-evt channel)))
 
 (define (fast-channel-put channel . args)
   (call-with-semaphore (fast-channel-lock channel)
@@ -67,6 +84,10 @@
       (set-fast-channel-head! channel (mcdr old-head))
       (unless (mcdr old-head)
         (set-fast-channel-tail! channel #f)))))
+
+(define (peek channel)
+  (let ([head (fast-channel-head channel)])
+    (mcar head)))
 
 
 ; vim:set ts=2 sw=2 et:

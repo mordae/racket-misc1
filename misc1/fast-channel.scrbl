@@ -73,5 +73,39 @@ yielding a much greater throughput.
   ]
 }
 
+@defproc[(fast-channel-peek (channel fast-channel?)) any]{
+  Same as @racket[fast-channel-get], but does not actually remove
+  the element from the @racket[channel].
+
+  @examples[#:eval fast-channel-eval
+    (fast-channel-put channel 42)
+    (fast-channel-peek channel)
+  ]
+}
+
+@defproc[(fast-channel-try-peek (channel fast-channel?)) any]{
+  Again, same as @racket[fast-channel-try-get], but does not
+  actually remove the element from the @racket[channel].
+
+  @examples[#:eval fast-channel-eval
+    (fast-channel-try-peek channel)
+    (fast-channel-get channel)
+    (fast-channel-try-peek channel)
+  ]
+}
+
+@defproc[(fast-channel-peek-evt (channel fast-channel?)) evt?]{
+  Create an event that is ready for synchronization when there is
+  at least one value waiting in the @racket[channel], but does not
+  consume the value upon successfull synchronization.
+
+  @examples[#:eval fast-channel-eval
+    (let ((peek-evt (fast-channel-peek-evt channel)))
+      (fast-channel-put channel 'hello)
+      (sync peek-evt))
+    (fast-channel-get channel)
+  ]
+}
+
 
 @; vim:set ft=scribble sw=2 ts=2 et:
