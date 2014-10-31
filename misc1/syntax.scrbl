@@ -106,6 +106,15 @@
   ]
 }
 
+@defform[(spawn-thread body ...)]{
+  Shortcut of @racket[(thread (λ () body ...))].
+
+  @examples[#:eval syntax-eval
+    (thread-wait
+      (spawn-thread 'do-something))
+  ]
+}
+
 @defform[(with-output-bytes body ...)]{
   Shortcut of @racket[(with-output-to-bytes (λ _ body ...))].
 

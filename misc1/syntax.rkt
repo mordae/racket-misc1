@@ -94,6 +94,10 @@
 (define-syntax-rule (with-semaphore sema body ...)
   (call-with-semaphore sema (λ _ body ...)))
 
+;; Just a shortcut for (thread ...).
+(define-syntax-rule (spawn-thread body ...)
+  (thread (λ () body ...)))
+
 
 ;; Shortcuts of byte and string streams.
 (define-syntax-rule (with-output-bytes body ...)
