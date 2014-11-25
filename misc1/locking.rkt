@@ -5,7 +5,7 @@
 
 (require racket/contract)
 
-(require "syntax.rkt")
+(require misc1/syntax)
 
 (provide with-read-lock
          with-write-lock)

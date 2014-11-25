@@ -1,13 +1,13 @@
 #lang scribble/manual
 
 @require[scribble/eval]
-@require["syntax.rkt"]
+@require[misc1/syntax]
 
 @require[(for-label racket)
-         (for-label "locking.rkt")]
+         (for-label misc1/locking)]
 
 @define[locking-eval (make-base-eval)]
-@interaction-eval[#:eval locking-eval (require "locking.rkt")]
+@interaction-eval[#:eval locking-eval (require misc1/locking)]
 
 @title{Advanced Locking}
 

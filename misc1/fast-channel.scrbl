@@ -3,10 +3,10 @@
 @require[scribble/eval]
 
 @require[(for-label racket)
-         (for-label "fast-channel.rkt")]
+         (for-label misc1/fast-channel)]
 
 @define[fast-channel-eval (make-base-eval)]
-@interaction-eval[#:eval fast-channel-eval (require "fast-channel.rkt")]
+@interaction-eval[#:eval fast-channel-eval (require misc1/fast-channel)]
 
 @title{Fast Channels}
 

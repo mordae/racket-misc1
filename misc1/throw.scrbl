@@ -4,10 +4,10 @@
 
 @require[(for-label racket
                     unstable/error)
-         (for-label "throw.rkt")]
+         (for-label misc1/throw)]
 
 @define[throw-eval (make-base-eval)]
-@interaction-eval[#:eval throw-eval (require "throw.rkt")]
+@interaction-eval[#:eval throw-eval (require misc1/throw)]
 
 @title{Exceptions}
 

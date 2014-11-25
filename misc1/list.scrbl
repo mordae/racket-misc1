@@ -3,10 +3,10 @@
 @require[scribble/eval]
 
 @require[(for-label racket racket/list)
-         (for-label "list.rkt")]
+         (for-label misc1/list)]
 
 @define[list-eval (make-base-eval)]
-@interaction-eval[#:eval list-eval (require "list.rkt")]
+@interaction-eval[#:eval list-eval (require misc1/list)]
 
 @title{Lists}
 

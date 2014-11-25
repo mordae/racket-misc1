@@ -3,10 +3,10 @@
 @require[scribble/eval]
 
 @require[(for-label racket)
-         (for-label "syntax.rkt")]
+         (for-label misc1/syntax)]
 
 @define[syntax-eval (make-base-eval)]
-@interaction-eval[#:eval syntax-eval (require "syntax.rkt")]
+@interaction-eval[#:eval syntax-eval (require misc1/syntax)]
 
 @title{Syntax Extensions}
 

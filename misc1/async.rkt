@@ -5,8 +5,8 @@
 
 (require racket/contract)
 
-(require "syntax.rkt"
-         "evt.rkt")
+(require misc1/syntax
+         misc1/evt)
 
 (provide async
          async/loop)

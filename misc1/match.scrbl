@@ -3,10 +3,10 @@
 @require[scribble/eval]
 
 @require[(for-label racket racket/match)
-         (for-label "match.rkt")]
+         (for-label misc1/match)]
 
 @define[match-eval (make-base-eval)]
-@interaction-eval[#:eval match-eval (require racket/match "match.rkt")]
+@interaction-eval[#:eval match-eval (require racket/match misc1/match)]
 
 @title{Match Extensions}
 

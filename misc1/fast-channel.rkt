@@ -5,7 +5,7 @@
 
 (require racket/contract)
 
-(require "syntax.rkt")
+(require misc1/syntax)
 
 (provide
   (contract-out

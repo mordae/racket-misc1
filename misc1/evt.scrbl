@@ -1,14 +1,14 @@
 #lang scribble/manual
 
 @require[scribble/eval]
-@require["syntax.rkt"]
+@require[misc1/syntax]
 
 @require[(for-label racket)
-         (for-label "evt.rkt")]
+         (for-label misc1/evt)]
 
 @define[evt-eval (make-base-eval)]
 @interaction-eval[#:eval evt-eval (require racket/async-channel)]
-@interaction-eval[#:eval evt-eval (require "evt.rkt")]
+@interaction-eval[#:eval evt-eval (require misc1/evt)]
 
 @title{Events}
 

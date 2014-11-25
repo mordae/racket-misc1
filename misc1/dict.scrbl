@@ -3,10 +3,10 @@
 @require[scribble/eval]
 
 @require[(for-label racket racket/dict racket/undefined)
-         (for-label "dict.rkt")]
+         (for-label misc1/dict)]
 
 @define[dict-eval (make-base-eval)]
-@interaction-eval[#:eval dict-eval (require "dict.rkt")]
+@interaction-eval[#:eval dict-eval (require misc1/dict)]
 
 @title{Dictionaries}
 

@@ -3,10 +3,10 @@
 @require[scribble/eval]
 
 @require[(for-label racket)
-         (for-label "async.rkt")]
+         (for-label misc1/async)]
 
 @define[async-eval (make-base-eval)]
-@interaction-eval[#:eval async-eval (require "async.rkt")]
+@interaction-eval[#:eval async-eval (require misc1/async)]
 
 @title{Asynchronous Tasks}
 
