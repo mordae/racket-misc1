@@ -3,7 +3,8 @@
 ; Single-Writer / Multiple Readers Locking Primitive
 ;
 
-(require racket/contract)
+(require racket/contract
+         racket/function)
 
 (require misc1/syntax)
 
@@ -28,21 +29,21 @@
 
 
 (define-syntax-rule (with-read-lock rw-l body ...)
-  (call-with-read-lock rw-l (Λ body ...)))
+  (call-with-read-lock rw-l (thunk body ...)))
 
 (define-syntax-rule (with-write-lock rw-l body ...)
-  (call-with-write-lock rw-l (Λ body ...)))
+  (call-with-write-lock rw-l (thunk body ...)))
 
 
 (define (call-with-read-lock rw-l proc)
-  (dynamic-wind (Λ (rwlock-read-lock rw-l))
+  (dynamic-wind (thunk (rwlock-read-lock rw-l))
                 proc
-                (Λ (rwlock-read-unlock rw-l))))
+                (thunk (rwlock-read-unlock rw-l))))
 
 (define (call-with-write-lock rw-l proc)
-  (dynamic-wind (Λ (rwlock-write-lock rw-l))
+  (dynamic-wind (thunk (rwlock-write-lock rw-l))
                 proc
-                (Λ (rwlock-write-unlock rw-l))))
+                (thunk (rwlock-write-unlock rw-l))))
 
 
 (define (rwlock-read-lock rw-l)

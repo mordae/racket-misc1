@@ -3,7 +3,8 @@
 ; Additional Events
 ;
 
-(require racket/contract)
+(require racket/contract
+         racket/function)
 
 (require misc1/syntax)
 
@@ -42,10 +43,11 @@
     (let ((alarm (alarm-in-evt 0)))
       (recursive (new-evt)
         (guard-evt
-          (Λ (replace-evt alarm
-                          (λ _
-                            (set! alarm (alarm-in-evt interval))
-                            (begin0 new-evt (handler)))))))))
+          (thunk
+            (replace-evt alarm
+                         (λ _
+                           (set! alarm (alarm-in-evt interval))
+                           (begin0 new-evt (handler)))))))))
 
   (define (recurring-evt base-evt (handler void))
     (recursive (new-evt)
@@ -64,7 +66,7 @@
   (letrec ((new-evt (wrap-evt evt (λ args
                                     (set! new-evt (apply constant-evt args))
                                     (apply values args)))))
-    (guard-evt (Λ new-evt))))
+    (guard-evt (thunk new-evt))))
 
 (define (make-trigger-evt)
   (recursive (self)
@@ -95,7 +97,7 @@
 (define (make-epoch-evt)
   (recursive (self)
     (epoch-evt (make-trigger-evt)
-               (guard-evt (Λ (epoch-evt-trigger-evt self))))))
+               (guard-evt (thunk (epoch-evt-trigger-evt self))))))
 
 (define (epoch-evt-advance! evt . args)
   (let ((old-trigger-evt (epoch-evt-trigger-evt evt)))
