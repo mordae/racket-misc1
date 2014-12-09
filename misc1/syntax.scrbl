@@ -163,4 +163,13 @@
 }
 
 
+@defform[(~> input filters ...)]{
+  Thread @racket[input] values through series of @racket[filters].
+
+  @examples[#:eval syntax-eval
+    (~> (values 1 2 3) + -)
+  ]
+}
+
+
 @; vim:set ft=scribble sw=2 ts=2 et:
