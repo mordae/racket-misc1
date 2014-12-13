@@ -117,13 +117,4 @@
          #'(void)))))
 
 
-;; Thread value(s) through a sequence of filters.
-(define-syntax (~> stx)
-  (syntax-case stx ()
-    ((_ input filter ...)
-     (with-syntax (((rev-filter ...) (reverse (syntax->list #'(filter ...)))))
-       #'(call-with-values (λ () input)
-                           (compose rev-filter ...))))))
-
-
 ; vim:set ts=2 sw=2 et:
