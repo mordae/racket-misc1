@@ -9,6 +9,7 @@
 @;local-table-of-contents[]
 
 @include-section["syntax.scrbl"]
+@include-section["match.scrbl"]
 @include-section["dict.scrbl"]
 @include-section["list.scrbl"]
 @include-section["throw.scrbl"]
