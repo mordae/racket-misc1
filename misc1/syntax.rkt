@@ -113,13 +113,12 @@
 (define-syntax (after stx)
   (syntax-case stx (cleanup)
     ((_ body ... (cleanup cleanup-body ...))
-     #'(with-handlers* ((void (λ (exn)
-                                (begin0
+     #'(begin0
+         (with-handlers* ((void (λ (exn)
                                   (begin cleanup-body ...)
-                                  (unless (eq? exn success)
-                                    (raise exn))))))
-         (begin body ...)
-         (raise success)))))
+                                  (raise exn))))
+           (begin body ...))
+         (begin cleanup-body ...)))))
 
 
 ;; Expands body only when an identifier is defined.
