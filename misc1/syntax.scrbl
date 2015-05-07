@@ -152,6 +152,13 @@
 }
 
 
+@defform[(after body ... (cleanup cleanup-body ...))]{
+  Execute the @racket[body ...] and then @racket[cleanup-body ...],
+  even when the original body have been interrupted by an exception.
+  Propagates the exception.
+}
+
+
 @defform[(when-defined name body ...)]{
   Expands the body only when given @racket[name] is defined.
 

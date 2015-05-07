@@ -107,6 +107,20 @@
 (define-syntax-rule (with-input-string str body ...)
   (with-input-from-string str (λ () body ...)))
 
+(define success
+  (gensym 'success))
+
+(define-syntax (after stx)
+  (syntax-case stx (cleanup)
+    ((_ body ... (cleanup cleanup-body ...))
+     #'(with-handlers* ((void (λ (exn)
+                                (begin0
+                                  (begin cleanup-body ...)
+                                  (unless (eq? exn success)
+                                    (raise exn))))))
+         (begin body ...)
+         (raise success)))))
+
 
 ;; Expands body only when an identifier is defined.
 (define-syntax (when-defined stx)
