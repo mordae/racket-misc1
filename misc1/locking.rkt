@@ -36,14 +36,20 @@
 
 
 (define (call-with-read-lock rw-l proc)
-  (dynamic-wind (thunk (rwlock-read-lock rw-l))
-                proc
-                (thunk (rwlock-read-unlock rw-l))))
+  (after
+    (begin
+      (rwlock-read-lock rw-l)
+      (proc))
+    (cleanup
+      (rwlock-read-unlock rw-l))))
 
 (define (call-with-write-lock rw-l proc)
-  (dynamic-wind (thunk (rwlock-write-lock rw-l))
-                proc
-                (thunk (rwlock-write-unlock rw-l))))
+  (after
+    (begin
+      (rwlock-write-lock rw-l)
+      (proc))
+    (cleanup
+      (rwlock-write-unlock rw-l))))
 
 
 (define (rwlock-read-lock rw-l)
