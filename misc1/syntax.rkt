@@ -107,9 +107,6 @@
 (define-syntax-rule (with-input-string str body ...)
   (with-input-from-string str (λ () body ...)))
 
-(define success
-  (gensym 'success))
-
 (define-syntax (after stx)
   (syntax-case stx (cleanup)
     ((_ body ... (cleanup cleanup-body ...))
