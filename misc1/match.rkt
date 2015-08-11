@@ -3,8 +3,7 @@
 ; Additional Match Expanders
 ;
 
-(require racket/match
-         racket/function)
+(require racket/match)
 
 (require
   (for-syntax racket/base
@@ -17,8 +16,10 @@
   (syntax-parser
     ((_ (k v) ...)
      #`(and (? hash?)
-            (and #,@#'((app (λ (v) (hash-ref v k #f))
-                            (and (? identity) v)) ...))))))
+            (and #,@#'((app (λ (ht)
+                              (and (hash-has-key? ht k)
+                                   (box (hash-ref ht k))))
+                            (? values (app unbox v))) ...))))))
 
 
 ; vim:set ts=2 sw=2 et:
